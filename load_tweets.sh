@@ -9,7 +9,7 @@ test-data.zip
 
 echo 'load normalized'
 for file in $files; do
-   python3 load_tweets.py --inputs="$file" --db postgresql://postgres:pass@localhost:1068/postgres
+   python3 load_tweets.py --inputs="$file" --db postgresql://postgres+psycopg2:pass@localhost:1068/postgres
     # call the load_tweets.py file to load data into pg_normalized
 done
 
