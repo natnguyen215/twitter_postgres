@@ -9,10 +9,15 @@ test-data.zip
 
 echo 'load normalized'
 for file in $files; do
+   python3 load_tweets.py --inputs="$file" --db postgresql://postgres:pass@localhost:1067/postgres
     # call the load_tweets.py file to load data into pg_normalized
 done
 
 echo 'load denormalized'
 for file in $files; do
+    unzip -p "$file" |
+        psql "postgresql://postgres:pass@localhost:1067/postgres" \
+        -v ON_ERROR_STOP=1 \
+        -c "COPY tweets_jsonb(data) FROM STDIN WITH (FORMAT csv, DELIMITER E'\t', QUOTE E'\x01');"
     # use SQL's COPY command to load data into pg_denormalized
 done
